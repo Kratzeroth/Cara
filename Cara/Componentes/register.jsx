@@ -38,7 +38,7 @@ const Registro = () => {
       <main>
         <section id="login-section">
           <div className="login-card">
-            <h2>Registrate malditasea registrateeeeee</h2>
+            <h2>Registrate </h2>
             <form onSubmit={handleSubmit}>
               <input
                 type="text"
