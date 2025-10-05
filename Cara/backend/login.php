@@ -18,7 +18,6 @@ $stmt->execute([$email]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if ($user && $password === $user["Clave"]) {
-    // aquí luego mejoraremos con password_verify()
     echo json_encode(["success" => true, "message" => "Login exitoso", "usuario" => $user["Nombre"]]);
 } else {
     echo json_encode(["success" => false, "message" => "Credenciales inválidas"]);
