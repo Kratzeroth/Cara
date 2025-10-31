@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Header from "./Header";
 import Footer from "./Footer";
-
+import { Link } from "react-router-dom";
 import f1 from "../src/assets/img/products/f1.jpg";
 import f2 from "../src/assets/img/products/f2.jpg";
 import f3 from "../src/assets/img/products/f3.jpg";
@@ -54,7 +54,7 @@ const Carrito = () => {
 
           <div className="resumen">
             <h3>Total: S/. {total}</h3>
-            <button className="finalizar-btn">Finalizar compra</button>
+            <Link to="/payment"><button className="finalizar-btn" >Finalizar compra</button></Link>
           </div>
         </div>
       </main>

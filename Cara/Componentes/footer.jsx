@@ -1,5 +1,5 @@
 import React from "react";
-import logo from "../src/assets/img/logo.png";  // 👈 Importa tus imágenes
+import logo from "../src/assets/img/logo.png";  
 import appStore from "../src/assets/img/pay/app.jpg";
 import playStore from "../src/assets/img/pay/play.jpg";
 import pay from "../src/assets/img/pay/pay.png";

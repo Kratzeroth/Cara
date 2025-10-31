@@ -9,26 +9,49 @@ const Registro = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
- 
-   /*para la cambio de pg al registrarse*/
   const navigate = useNavigate(); 
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    /*validacion de campos*/
-
+    // Validación de campos
     if (!nombre || !email || !password || !confirmPassword) {
-      setError("Todos los campos son obligatorios");
-      /*validacion de contraseñas iguales */
-    } else if (password !== confirmPassword) {
-      setError("Las contraseñas no coinciden");
-    } else {
-      setError("");
-      alert("✅ Registro exitoso"); 
-       /*dirige a pg de products*/
-      navigate("/products"); 
+      setError("⚠️ Todos los campos son obligatorios");
+      setSuccess("");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError("⚠️ Las contraseñas no coinciden");
+      setSuccess("");
+      return;
+    }
+
+    try {
+      // Enviar datos al backend
+      const response = await fetch("http://localhost:8080/Cara/Cara/backend/registro.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nombre, email, password }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setError("");
+        setSuccess("✅ Registro exitoso");
+        alert("✅ Usuario registrado correctamente");
+        navigate("/products"); // redirigir después del registro
+      } else {
+        setError(data.message);
+        setSuccess("");
+      }
+    } catch (error) {
+      console.error("Error al conectar con el servidor:", error);
+      setError("❌ No se pudo conectar con el servidor");
+      setSuccess("");
     }
   };
 
@@ -38,7 +61,7 @@ const Registro = () => {
       <main>
         <section id="login-section">
           <div className="login-card">
-            <h2>Registrate </h2>
+            <h2>Regístrate</h2>
             <form onSubmit={handleSubmit}>
               <input
                 type="text"
@@ -56,7 +79,6 @@ const Registro = () => {
                 type="password"
                 placeholder="Contraseña"
                 value={password}
-                /* actualiza el estado de la contrasseña */
                 onChange={(e) => setPassword(e.target.value)}
               />
               <input
@@ -65,7 +87,10 @@ const Registro = () => {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
               />
+
               {error && <p className="error">{error}</p>}
+              {success && <p className="success">{success}</p>}
+
               <button type="submit" className="normal">Registrarse</button>
             </form>
 
@@ -82,3 +107,4 @@ const Registro = () => {
 };
 
 export default Registro;
+
