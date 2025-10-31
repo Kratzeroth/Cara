@@ -95,6 +95,60 @@ body {
     left: 0;
 }
 
+/* === BOTÓN LOGIN Y CARRITO === */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  
+}
+
+#login-btn {
+  background-color: #088178;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 10px 22px;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 9999;
+}
+
+#login-btn:hover {
+  background-color: #06685f;
+  transform: scale(1.05);
+}
+
+#cart-icon {
+  position: relative;
+  font-size: 22px;
+  color: #1a1a1a;
+  cursor: pointer;
+  transition: 0.3s ease;
+  z-index: 1
+}
+
+#cart-icon:hover {
+  color: #088178;
+  transform: scale(1.1);
+}
+
+#cart-icon span {
+  position: absolute;
+  top: -8px;
+  right: -10px;
+  background: #ef3636;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 50%;
+  padding: 2px 6px;
+}
+
+
 .mobile {
     display: none;
     align-items: center;
@@ -105,6 +159,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: 10;
 }
 
 #close {
@@ -140,8 +195,10 @@ body {
     left: 20px;
 }
 
+/* ACA TERMINA EL HEADER */
+
 #hero {
-    background-image: url("../src/assets/img/hero4.png");
+    background-image: url("../src/assets/img/fondoBodega.png");
     height: 90vh;
     width: 100%;
     background-size: cover;
@@ -1284,4 +1341,428 @@ footer .copyright {
         width: 100%;
         padding: 20px;
     }
+}
+
+/* CARRITO  */
+*login y register*/
+#login-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 80px); /* - altura del header */
+  margin-top: 0px;
+  background-color: #f5f5f5; 
+}
+
+.login-card {
+  background-color: white;
+  padding: 3rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  width: 450px;
+  max-width: 90%;
+  text-align: center;
+}
+
+.login-card h2 {
+  margin-bottom: 1.5rem;
+}
+
+.login-card input {
+  width: 100%;
+  padding: 0.8rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+
+.login-card .error {
+  color: red;
+  margin-bottom: 1rem;
+}
+
+.login-card button.normal {
+  width: 100%;
+  padding: 0.8rem;
+  background-color: #c1abe8; 
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.login-card button.normal:hover {
+  background-color: #7d56c0;
+}
+
+
+
+/*PERFIIIL DE USUARIOOOO */
+
+.perfil-container {
+  display: flex;
+  min-height: 80vh;
+  gap: 2rem;
+  padding: 2rem;
+}
+
+/* Menú lateral */
+.perfil-menu {
+  width: 220px;
+  background-color: #f9fafb;
+  border-radius: 12px;
+  padding: 2rem 1.5rem;
+  box-shadow: 0 0 15px rgba(0,0,0,0.08);
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.perfil-menu h3 {
+  margin-bottom: 2rem;
+  font-size: 1.2rem;
+  color: #111827;
+}
+
+.perfil-menu ul {
+  list-style: none;
+  padding: 0;
+}
+
+.perfil-menu li {
+  margin: 1rem 0;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #080808;
+  transition: all 0.2s ease;
+}
+
+/* Hover y selección */
+.perfil-menu li:hover {
+  background-color: #e0e7ff;
+  color: #000000;
+}
+
+.perfil-menu li.active {
+  background-color: #a97ed8;
+  color: white;
+  font-weight: bold;
+}
+
+/* Sección derecha */
+.perfil-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Card del formulario */
+.perfil-card {
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Inputs y labels */
+.perfil-card h2 {
+  margin-bottom: 1.5rem;
+}
+
+.perfil-card label {
+  margin-top: 1rem;
+  margin-bottom: 0.3rem;
+  font-weight: 500;
+}
+
+.perfil-card input {
+  padding: 0.6rem 0.8rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+/* Botón guardar */
+.guardar-btn {
+  margin-top: 1.5rem;
+  padding: 0.6rem 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  background-color: #d487ec;
+  color: #fff;
+  align-self: flex-start;
+}
+
+.guardar-btn:hover {
+  background-color: #712c88;
+}
+
+
+
+
+
+/* CRRITO */
+
+.carrito-container {
+  padding: 2rem;
+  min-height: 80vh;
+}
+
+.carrito-card {
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.carrito-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.carrito-item img {
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.carrito-item .detalle {
+  flex: 1;
+}
+
+.cantidad {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.cantidad button {
+  padding: 0.3rem 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  cursor: pointer;
+  background-color: #f9fafb;
+}
+
+.subtotal {
+  font-weight: bold;
+}
+
+.resumen {
+  margin-top: 1rem;
+  text-align: right;
+}
+
+.finalizar-btn {
+  margin-top: 0.5rem;
+  padding: 0.7rem 1.2rem;
+  background-color: #dea6e2;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.finalizar-btn:hover {
+  background-color: #c077c6;
+}
+
+.emoji-carrito {
+  font-size: 25px;          
+  margin-left: 100px;        
+  cursor: pointer;          
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+
+/* pasarela de pago */
+/* === PASARELA PRINCIPAL === */
+.pasarela-container {
+  padding: 60px 10%;
+  background: #fafafa;
+  min-height: 100vh;
+}
+
+.titulo-pasarela {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 30px;
+  color: #1a4d2e;
+}
+
+.productos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 25px;
+}
+
+.producto-card {
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  padding: 15px;
+  text-align: center;
+  transition: transform 0.3s;
+}
+.producto-card:hover {
+  transform: translateY(-5px);
+}
+.producto-card img {
+  width: 100%;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+.cantidad-controles {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+.cantidad-controles button {
+  background: #1a4d2e;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+
+.perfil-container {
+  position: relative;
+}
+
+.perfil-menu {
+  position: absolute;
+  top: 40px;
+  right: 0;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  padding: 10px;
+  width: 180px;
+  text-align: left;
+}
+
+.perfil-menu p {
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+/* === RESUMEN === */
+.resumen-total {
+  margin-top: 40px;
+  text-align: center;
+}
+.btn-pagar {
+  background: #1a4d2e;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: background 0.3s;
+}
+.btn-pagar:hover {
+  background: #26734d;
+}
+
+/* === MODAL DE PAGO === */
+.overlay-pasarela {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(6px);
+  z-index: 1000;
+}
+
+.modal-pago {
+  background: #fff;
+  border-radius: 20px;
+  padding: 40px;
+  width: 90%;
+  max-width: 450px;
+  text-align: center;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+  animation: aparecer 0.4s ease;
+}
+
+.modal-pago h2 {
+  color: #1a4d2e;
+  margin-bottom: 10px;
+}
+
+.monto {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.metodos {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 25px;
+}
+.metodo {
+  background: #eee;
+  border: none;
+  padding: 10px 25px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.metodo.activo {
+  background: #1a4d2e;
+  color: white;
+}
+
+.qr-box {
+  background: #f9f9f9;
+  border-radius: 15px;
+  padding: 20px;
+}
+.qr-box img {
+  margin: 15px 0;
+  width: 220px;
+  height: 220px;
+}
+
+.btn-cerrar {
+  margin-top: 20px;
+  background: #c0392b;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.btn-cerrar:hover {
+  background: #e74c3c;
+}
+
+/* === ANIMACIÓN === */
+@keyframes aparecer {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
 }
