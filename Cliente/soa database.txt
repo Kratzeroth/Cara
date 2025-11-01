@@ -1,0 +1,360 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
+--
+-- Servidor: 127.0.0.1
+-- Tiempo de generación: 31-10-2025 a las 06:46:38
+-- Versión del servidor: 10.4.28-MariaDB
+-- Versión de PHP: 8.2.4
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Base de datos: `soa`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `categoria`
+--
+
+CREATE TABLE `categoria` (
+  `IdCategoria` int(11) NOT NULL,
+  `NombreCategoria` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `categoria`
+--
+
+INSERT INTO `categoria` (`IdCategoria`, `NombreCategoria`) VALUES
+(1, 'Abarrotes'),
+(2, 'Bebidas'),
+(3, 'Lácteos'),
+(4, 'Embutidos'),
+(5, 'Snacks y golosinas'),
+(6, 'Panadería y pastelería'),
+(7, 'Limpieza del hogar'),
+(8, 'Cuidado personal'),
+(9, 'Enlatados y conservas'),
+(10, 'Productos de cocina'),
+(11, 'Frutas y verduras'),
+(12, 'Carnes y aves'),
+(13, 'Congelados'),
+(14, 'Artículos de papelería'),
+(15, 'Mascotas'),
+(16, 'Licores y cervezas'),
+(17, 'Productos de temporada');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `cliente`
+--
+
+CREATE TABLE `cliente` (
+  `IdCliente` int(11) NOT NULL,
+  `IdUsuario` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `detallepedido`
+--
+
+CREATE TABLE `detallepedido` (
+  `IdPedido` int(11) NOT NULL,
+  `IdProducto` int(11) NOT NULL,
+  `Subtotal` decimal(10,2) NOT NULL,
+  `Cantidad` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `empleado`
+--
+
+CREATE TABLE `empleado` (
+  `IdEmpleado` int(11) NOT NULL,
+  `IdUsuario` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `pedido`
+--
+
+CREATE TABLE `pedido` (
+  `IdPedido` int(11) NOT NULL,
+  `IdCliente` int(11) NOT NULL,
+  `IdEmpleado` int(11) NOT NULL,
+  `Fecha` datetime NOT NULL,
+  `Estado` varchar(20) NOT NULL,
+  `Total` decimal(10,2) NOT NULL,
+  `MetodoPago` varchar(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `producto`
+--
+
+CREATE TABLE `producto` (
+  `IdProducto` int(11) NOT NULL,
+  `IdCategoria` int(11) NOT NULL,
+  `IdProveedor` int(11) NOT NULL,
+  `Nombre` varchar(50) NOT NULL,
+  `Descripcion` varchar(50) NOT NULL,
+  `Precio` decimal(10,2) NOT NULL,
+  `Stock` int(11) NOT NULL,
+  `FechaVencimiento` date DEFAULT NULL,
+  `Imagen` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `producto`
+--
+
+INSERT INTO `producto` (`IdProducto`, `IdCategoria`, `IdProveedor`, `Nombre`, `Descripcion`, `Precio`, `Stock`, `FechaVencimiento`, `Imagen`) VALUES
+(1, 1, 1, 'Aceite Primor 1L', 'Aceite vegetal de girasol de alta calidad', 8.50, 80, '2026-01-15', 'imagenes_productos/aceite_primor.jpg'),
+(2, 3, 2, 'Leche Gloria Entera 400g', 'Leche evaporada entera ideal para el desayuno', 4.20, 150, '2026-05-01', 'imagenes_productos/leche_gloria.jpg'),
+(3, 5, 3, 'Chocolatina Sublime', 'Chocolate con maní clásico de la marca Sublime', 1.50, 300, '2026-03-20', 'imagenes_productos/chocolatina_sublime.jpg'),
+(4, 2, 1, 'Inca Kola 500ml', 'Bebida gaseosa peruana sabor nacional', 3.00, 200, '2025-12-31', 'imagenes_productos/inca_kola_500ml.jpg'),
+(5, 7, 1, 'Detergente Bolívar 1kg', 'Detergente en polvo con poder de limpieza profunda', 6.50, 120, '2027-06-15', 'imagenes_productos/detergente_bolivar.jpg'),
+(6, 8, 1, 'Shampoo Plusbelle 400ml', 'Shampoo hidratante con aroma floral', 7.00, 90, '2027-09-01', 'imagenes_productos/shampoo_plusbelle.jpg'),
+(7, 9, 4, 'Atún Florida 170g', 'Atún en trozos en aceite vegetal', 5.20, 100, '2026-10-20', 'imagenes_productos/atun_florida.jpg'),
+(8, 6, 1, 'Pan de Molde Bimbo 600g', 'Pan blanco suave ideal para sándwiches', 9.50, 60, '2025-11-01', 'imagenes_productos/pan_bimbo.jpg'),
+(9, 15, 5, 'Alimento para perros Ricocan 1kg', 'Comida balanceada para perros adultos', 10.90, 75, '2026-09-15', 'imagenes_productos/ricocan_1kg.jpg'),
+(10, 4, 2, 'Jamonada Hot Dog 200g', 'Jamonada de cerdo ideal para hot dogs o sánguches', 6.00, 110, '2025-08-10', 'imagenes_productos/jamonada_hotdog.jpg');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `proveedor`
+--
+
+CREATE TABLE `proveedor` (
+  `IdProveedor` int(11) NOT NULL,
+  `NombreProveedor` varchar(100) NOT NULL,
+  `Contacto` varchar(100) NOT NULL,
+  `Origen` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `proveedor`
+--
+
+INSERT INTO `proveedor` (`IdProveedor`, `NombreProveedor`, `Contacto`, `Origen`) VALUES
+(1, 'Alicorp S.A.A.', '+51 987 654 321', 'Lima – Perú'),
+(2, 'Leche Gloria S.A.', '+51 912 345 678', 'Lima – Perú'),
+(3, 'Compañía Nacional de Chocolates del Perú', '+51 923 456 789', 'Lima – Perú'),
+(4, 'Distribuidora Comercial Álvarez Bohl S.R.L.', '+51 944 555 666', 'Norte de Perú'),
+(5, 'Andes Alimentos & Bebidas S.A.C.', '+51 911 222 333', 'Lima – Perú');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `rol`
+--
+
+CREATE TABLE `rol` (
+  `IdRol` int(11) NOT NULL,
+  `NombreRol` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `usuario`
+--
+
+CREATE TABLE `usuario` (
+  `IdUsuario` int(11) NOT NULL,
+  `Nombre` varchar(100) NOT NULL,
+  `Email` varchar(100) NOT NULL,
+  `Clave` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `usuario`
+--
+
+INSERT INTO `usuario` (`IdUsuario`, `Nombre`, `Email`, `Clave`) VALUES
+(1, 'rodrigo', 'romero@gmail.com', '$2y$10$9Hcqa9hIEXFQWzRyqF2FEuBAtLN0FG3tmWRiI9AP5C6urmnT4zjvS'),
+(2, 'Rodrigo Alonso', 'rodrigo@gmail.com', '$2y$10$y7.OXkVBJRHA8UtF3FLJ/OjP4aBDI4foBE2HLYl6FBd0T5A5XGoRS'),
+(3, 'alonso', 'alonso@gmail.com', '$2y$10$5IN1T9XA7m1X5wMgFfqKnu1TPysGJ3sD8b7.CJzqAk.YYga12WEre');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `usuariorol`
+--
+
+CREATE TABLE `usuariorol` (
+  `IdUsuario` int(11) NOT NULL,
+  `IdRol` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Índices para tablas volcadas
+--
+
+--
+-- Indices de la tabla `categoria`
+--
+ALTER TABLE `categoria`
+  ADD PRIMARY KEY (`IdCategoria`);
+
+--
+-- Indices de la tabla `cliente`
+--
+ALTER TABLE `cliente`
+  ADD PRIMARY KEY (`IdCliente`),
+  ADD UNIQUE KEY `IdUsuario` (`IdUsuario`);
+
+--
+-- Indices de la tabla `detallepedido`
+--
+ALTER TABLE `detallepedido`
+  ADD PRIMARY KEY (`IdPedido`,`IdProducto`),
+  ADD KEY `detallepedido_ibfk_2` (`IdProducto`);
+
+--
+-- Indices de la tabla `empleado`
+--
+ALTER TABLE `empleado`
+  ADD PRIMARY KEY (`IdEmpleado`),
+  ADD UNIQUE KEY `IdUsuario` (`IdUsuario`);
+
+--
+-- Indices de la tabla `pedido`
+--
+ALTER TABLE `pedido`
+  ADD PRIMARY KEY (`IdPedido`),
+  ADD KEY `IdCliente` (`IdCliente`),
+  ADD KEY `IdEmpleado` (`IdEmpleado`);
+
+--
+-- Indices de la tabla `producto`
+--
+ALTER TABLE `producto`
+  ADD PRIMARY KEY (`IdProducto`),
+  ADD KEY `producto_ibfk_1` (`IdCategoria`),
+  ADD KEY `producto_ibfk_2` (`IdProveedor`);
+
+--
+-- Indices de la tabla `proveedor`
+--
+ALTER TABLE `proveedor`
+  ADD PRIMARY KEY (`IdProveedor`);
+
+--
+-- Indices de la tabla `rol`
+--
+ALTER TABLE `rol`
+  ADD PRIMARY KEY (`IdRol`),
+  ADD UNIQUE KEY `NombreRol` (`NombreRol`);
+
+--
+-- Indices de la tabla `usuario`
+--
+ALTER TABLE `usuario`
+  ADD PRIMARY KEY (`IdUsuario`),
+  ADD UNIQUE KEY `Email` (`Email`);
+
+--
+-- Indices de la tabla `usuariorol`
+--
+ALTER TABLE `usuariorol`
+  ADD PRIMARY KEY (`IdUsuario`,`IdRol`),
+  ADD KEY `IdRol` (`IdRol`);
+
+--
+-- AUTO_INCREMENT de las tablas volcadas
+--
+
+--
+-- AUTO_INCREMENT de la tabla `categoria`
+--
+ALTER TABLE `categoria`
+  MODIFY `IdCategoria` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+
+--
+-- AUTO_INCREMENT de la tabla `producto`
+--
+ALTER TABLE `producto`
+  MODIFY `IdProducto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT de la tabla `proveedor`
+--
+ALTER TABLE `proveedor`
+  MODIFY `IdProveedor` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT de la tabla `usuario`
+--
+ALTER TABLE `usuario`
+  MODIFY `IdUsuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- Restricciones para tablas volcadas
+--
+
+--
+-- Filtros para la tabla `cliente`
+--
+ALTER TABLE `cliente`
+  ADD CONSTRAINT `cliente_ibfk_1` FOREIGN KEY (`IdUsuario`) REFERENCES `usuario` (`IdUsuario`);
+
+--
+-- Filtros para la tabla `detallepedido`
+--
+ALTER TABLE `detallepedido`
+  ADD CONSTRAINT `detallepedido_ibfk_1` FOREIGN KEY (`IdPedido`) REFERENCES `pedido` (`IdPedido`),
+  ADD CONSTRAINT `detallepedido_ibfk_2` FOREIGN KEY (`IdProducto`) REFERENCES `producto` (`IdProducto`);
+
+--
+-- Filtros para la tabla `empleado`
+--
+ALTER TABLE `empleado`
+  ADD CONSTRAINT `empleado_ibfk_1` FOREIGN KEY (`IdUsuario`) REFERENCES `usuario` (`IdUsuario`);
+
+--
+-- Filtros para la tabla `pedido`
+--
+ALTER TABLE `pedido`
+  ADD CONSTRAINT `pedido_ibfk_1` FOREIGN KEY (`IdCliente`) REFERENCES `cliente` (`IdCliente`),
+  ADD CONSTRAINT `pedido_ibfk_2` FOREIGN KEY (`IdEmpleado`) REFERENCES `empleado` (`IdEmpleado`);
+
+--
+-- Filtros para la tabla `producto`
+--
+ALTER TABLE `producto`
+  ADD CONSTRAINT `producto_ibfk_1` FOREIGN KEY (`IdCategoria`) REFERENCES `categoria` (`IdCategoria`),
+  ADD CONSTRAINT `producto_ibfk_2` FOREIGN KEY (`IdProveedor`) REFERENCES `proveedor` (`IdProveedor`);
+
+--
+-- Filtros para la tabla `usuariorol`
+--
+ALTER TABLE `usuariorol`
+  ADD CONSTRAINT `usuariorol_ibfk_1` FOREIGN KEY (`IdUsuario`) REFERENCES `usuario` (`IdUsuario`),
+  ADD CONSTRAINT `usuariorol_ibfk_2` FOREIGN KEY (`IdRol`) REFERENCES `rol` (`IdRol`);
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
