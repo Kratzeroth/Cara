@@ -1,0 +1,105 @@
+CREATE DATABASE SOA;
+
+USE SOA;
+
+CREATE TABLE Usuario(
+IdUsuario int PRIMARY KEY NOT NULL AUTO_INCREMENT,
+Nombre varchar(50) NOT NULL,
+ApePaterno varchar (50) NOT NULL,
+ApeMaterno varchar(50) NOT NULL,
+DNI int UNIQUE KEY NOT NULL,
+Telefono int NOT NULL,
+Sexo varchar(20) NOT NULL,
+Email varchar(100) NOT NULL,
+Clave varchar(50) NOT NULL
+);
+
+CREATE TABLE Rol(
+IdRol int PRIMARY KEY NOT NULL AUTO_INCREMENT,
+NombreRol varchar(50) UNIQUE KEY NOT NULL
+);
+
+CREATE TABLE UsuarioRol(
+IdUsuario int NOT NULL,
+IdRol int NOT NULL,
+PRIMARY KEY (IdUsuario, IdRol),
+FOREIGN KEY (IdUsuario) REFERENCES Usuario(IdUsuario),
+FOREIGN KEY (IdRol) REFERENCES Rol(IdRol)
+);
+
+CREATE TABLE Cliente(
+IdCliente int PRIMARY KEY NOT NULL AUTO_INCREMENT,
+IdUsuario int UNIQUE KEY NOT NULL,
+FOREIGN KEY (IdUsuario) REFERENCES Usuario(IdUsuario)
+);
+
+CREATE TABLE Empleado(
+IdEmpleado int PRIMARY KEY NOT NULL AUTO_INCREMENT,
+IdUsuario int UNIQUE KEY NOT NULL,
+FOREIGN KEY (IdUsuario) REFERENCES Usuario(IdUsuario)
+);
+
+CREATE TABLE Categoria(
+IdCategoria int PRIMARY KEY NOT NULL AUTO_INCREMENT,
+NombreCategoria varchar(50) NOT NULL
+);
+
+CREATE TABLE Proveedor(
+IdProveedor int PRIMARY KEY NOT NULL AUTO_INCREMENT,
+NombreProveedor varchar(100) NOT NULL,
+Contacto varchar(100) NOT NULL,
+Origen varchar(100) NOT NULL
+);
+
+CREATE TABLE Producto(
+IdProducto int PRIMARY KEY NOT NULL AUTO_INCREMENT,
+IdCategoria int NOT NULL,
+IdProveedor int NOT NULL,
+Nombre varchar(50) NOT NULL,
+Descripcion varchar(50) NOT NULL,
+Precio decimal(10,2) NOT NULL,
+Stock int NOT NULL,
+FechaVencimiento date NULL,
+FOREIGN KEY (IdCategoria) REFERENCES Categoria(IdCategoria),
+FOREIGN KEY (IdProveedor) REFERENCES Proveedor(IdProveedor)
+);
+
+CREATE TABLE Campaña (
+IdCampaña INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+Nombre VARCHAR(100) NOT NULL,
+FechaInicio DATE NOT NULL,
+FechaFin DATE NOT NULL,
+Descripcion VARCHAR(100)
+);
+
+CREATE TABLE Oferta (
+IdOferta INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+IdProducto INT NOT NULL,
+IdCampaña INT NOT NULL,
+Descuento DECIMAL(10,2) NOT NULL,
+FOREIGN KEY (IdProducto) REFERENCES Producto(IdProducto),
+FOREIGN KEY (IdCampaña) REFERENCES Campaña(IdCampaña)
+);
+
+CREATE TABLE Pedido(
+IdPedido int PRIMARY KEY NOT NULL AUTO_INCREMENT,
+IdCliente int NOT NULL,
+IdEmpleado int NOT NULL,
+Fecha datetime NOT NULL,
+Estado varchar(20) NOT NULL,
+Total decimal (10,2) NOT NULL,
+MetodoPago varchar(20) NOT NULL,
+FOREIGN KEY (IdCliente) REFERENCES Cliente(IdCliente),
+FOREIGN KEY (IdEmpleado) REFERENCES Empleado(IdEmpleado)
+);
+
+CREATE TABLE DetallePedido(
+IdPedido int NOT NULL,
+IdProducto int NOT NULL,
+Subtotal decimal(10,2) NOT NULL,
+Cantidad int NOT NULL,
+PRIMARY KEY(IdPedido, IdProducto),
+FOREIGN KEY (IdPedido) REFERENCES Pedido(IdPedido),
+FOREIGN KEY (IdProducto) REFERENCES Producto(IdProducto)
+);
+
