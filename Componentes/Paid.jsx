@@ -31,10 +31,9 @@ const Pasarela = () => {
 
   const total = productos.reduce((acc, p) => acc + p.precio * p.cantidad, 0);
 
-  const generarQR = (texto) =>
-    `https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl=${encodeURIComponent(
-      texto
-    )}`;
+const generarQR = (texto) =>
+  `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(texto)}`;
+
 
   return (
     <>
