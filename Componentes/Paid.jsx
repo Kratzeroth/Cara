@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { QRCodeCanvas } from "qrcode.react"; // ✅ importamos el generador QR
 import Header from "./Header";
 import Footer from "./Footer";
 import f1 from "../src/assets/img/products/f1.jpg";
@@ -31,9 +32,22 @@ const Pasarela = () => {
 
   const total = productos.reduce((acc, p) => acc + p.precio * p.cantidad, 0);
 
-const generarQR = (texto) =>
-  `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(texto)}`;
+  // ✅ Generar enlace Yape o Plin
+  const generarYapeURL = (total) => {
+    const phone = "987654321"; // número Yape
+    const message = `Pago por compra Tienda CARA - Monto: S/. ${total}`;
+    return `https://www.yape.com.pe/pay?phone=${phone}&amount=${total}&message=${encodeURIComponent(
+      message
+    )}`;
+  };
 
+  const generarPlinURL = (total) => {
+    const phone = "912345678"; // número Plin
+    const message = `Pago por compra Tienda CARA - Monto: S/. ${total}`;
+    return `https://www.plin.pe/pay?phone=${phone}&amount=${total}&message=${encodeURIComponent(
+      message
+    )}`;
+  };
 
   return (
     <>
@@ -91,29 +105,38 @@ const generarQR = (texto) =>
               {metodo === "yape" ? (
                 <>
                   <h3>Pagar con Yape</h3>
-                  <img
-                    src={generarQR(
-                      `Pago Yape - Monto: S/. ${total} - Cel: 987654321`
-                    )}
-                    alt="QR Yape"
+                  <QRCodeCanvas
+                    value={generarYapeURL(total)} // 🔥 QR dinámico
+                    size={250}
+                    bgColor="#ffffff"
+                    fgColor="#000000"
+                    includeMargin={true}
                   />
-                  <p>Escanea el QR o envía a: <strong>987 654 321</strong></p>
+                  <p>
+                    Escanea el QR o envía a: <strong>987 654 321</strong>
+                  </p>
                 </>
               ) : (
                 <>
                   <h3>Pagar con Plin</h3>
-                  <img
-                    src={generarQR(
-                      `Pago Plin - Monto: S/. ${total} - Cel: 912345678`
-                    )}
-                    alt="QR Plin"
+                  <QRCodeCanvas
+                    value={generarPlinURL(total)} // 🔥 QR dinámico
+                    size={250}
+                    bgColor="#ffffff"
+                    fgColor="#000000"
+                    includeMargin={true}
                   />
-                  <p>Escanea el QR o envía a: <strong>912 345 678</strong></p>
+                  <p>
+                    Escanea el QR o envía a: <strong>912 345 678</strong>
+                  </p>
                 </>
               )}
             </div>
 
-            <button className="btn-cerrar" onClick={() => setMostrarPasarela(false)}>
+            <button
+              className="btn-cerrar"
+              onClick={() => setMostrarPasarela(false)}
+            >
               Cancelar
             </button>
           </div>
