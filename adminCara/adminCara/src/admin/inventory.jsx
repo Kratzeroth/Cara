@@ -3,12 +3,8 @@ import Sidebar from "../componentes/sidebar.jsx";
 import "../assets/css/inventory.css";
 
 const initialProducts = [
-  { id: 1, name: "Laptop Gamer", category: "Electrónica", stock: 12, price: 4500, provider: "Proveedor A" },
-  { id: 2, name: "Mouse Logitech", category: "Accesorios", stock: 45, price: 120, provider: "Proveedor B" },
-  { id: 3, name: "Monitor 144Hz", category: "Electrónica", stock: 8, price: 980, provider: "Proveedor C" },
-  { id: 4, name: "Teclado Mecánico", category: "Accesorios", stock: 30, price: 250, provider: "Proveedor B" },
-  { id: 5, name: "Auriculares Bluetooth", category: "Accesorios", stock: 25, price: 150, provider: "Proveedor D" },
-  { id: 6, name: "Webcam 1080p", category: "Electrónica", stock: 15, price: 300, provider: "Proveedor C" }
+  { id: 1, name: "Laptop Gamer", category: "Electrónica", stock: 12, price: 4500, provider: "Proveedor A", image: null },
+  { id: 2, name: "Mouse Logitech", category: "Accesorios", stock: 45, price: 120, provider: "Proveedor B", image: null },
 ];
 
 export default function Inventory() {
@@ -22,15 +18,32 @@ export default function Inventory() {
     p.name.toLowerCase().includes(filter.search.toLowerCase())
   );
 
+  // 🔥 NUEVO handleSave (ENVÍA FORM DATA + IMAGEN)
   const handleSave = (product) => {
-    const updatedProduct = { ...product, status: product.stock > 0 ? "Activo" : "Agotado" };
-    if (product.id) {
-      setProducts(products.map(p => p.id === product.id ? updatedProduct : p));
-    } else {
-      setProducts([...products, { ...updatedProduct, id: Date.now() }]);
-    }
-    setModalOpen(false);
-    setEditProduct(null);
+    const formData = new FormData();
+
+    formData.append("name", product.name);
+    formData.append("category", product.category);
+    formData.append("stock", product.stock);
+    formData.append("price", product.price);
+    formData.append("provider", product.provider);
+
+    if (product.id) formData.append("id", product.id);
+    if (product.image) formData.append("image", product.image);
+
+    const url = product.id
+      ? "http://localhost/Cara/backend/product/updateProduct.php"
+      : "http://localhost/Cara/backend/product/addProduct.php";
+
+    fetch(url, {
+      method: "POST",
+      body: formData,
+    })
+      .then(res => res.text())
+      .then(msg => {
+        alert(msg);
+        window.location.reload();
+      });
   };
 
   const handleEdit = (product) => {
@@ -69,7 +82,7 @@ export default function Inventory() {
         {/* Botón agregar */}
         <button className="btn-add" onClick={() => setModalOpen(true)}>Agregar Producto</button>
 
-        {/* Tabla de inventario */}
+        {/* Tabla */}
         <div className="inventory-table-wrapper">
           <table className="inventory-table">
             <thead>
@@ -79,7 +92,7 @@ export default function Inventory() {
                 <th>Stock</th>
                 <th>Precio</th>
                 <th>Proveedor</th>
-                <th>Estado</th>
+                <th>Imagen</th> {/* 🔥 NUEVA COLUMNA */}
                 <th>Acciones</th>
               </tr>
             </thead>
@@ -89,12 +102,28 @@ export default function Inventory() {
                   <td>{p.name}</td>
                   <td>{p.category}</td>
                   <td>{p.stock}</td>
-                  <td>{p.price}</td>
+                  <td>S/ {p.price}</td>
                   <td>{p.provider}</td>
-                  <td>{p.status}</td>
+
+                  {/* 🔥 MOSTRAR IMAGEN SI EXISTE */}
                   <td>
-                    <button className="btn-edit" onClick={() => handleEdit(p)}>Editar</button>
-                    <button className="btn-delete" onClick={() => handleDelete(p.id)}>Eliminar</button>
+                    {p.image ? (
+                      <img
+                        src={`http://localhost/Cara/backend/uploads/${p.image}`}
+                        alt=""
+                        width="50"
+                        style={{ borderRadius: "6px" }}
+                      />
+                    ) : "Sin imagen"}
+                  </td>
+
+                  <td>
+                    <button className="btn-edit" onClick={() => handleEdit(p)}>
+                      Editar
+                    </button>
+                    <button className="btn-delete" onClick={() => handleDelete(p.id)}>
+                      Eliminar
+                    </button>
                   </td>
                 </tr>
               ))}
@@ -102,7 +131,7 @@ export default function Inventory() {
           </table>
         </div>
 
-        {/* Modal para agregar/editar */}
+        {/* Modal */}
         {modalOpen && (
           <ProductModal
             product={editProduct}
@@ -115,8 +144,11 @@ export default function Inventory() {
   );
 }
 
+// 🔥 MODAL COMPLETO CON INPUT PARA IMAGEN
 function ProductModal({ product, onClose, onSave }) {
-  const [form, setForm] = useState(product || { name: "", category: "Electrónica", stock: 0, price: 0, provider: "" });
+  const [form, setForm] = useState(
+    product || { name: "", category: "Electrónica", stock: 0, price: 0, provider: "" }
+  );
 
   return (
     <div className="modal-bg">
@@ -157,6 +189,13 @@ function ProductModal({ product, onClose, onSave }) {
           placeholder="Proveedor"
           value={form.provider}
           onChange={(e) => setForm({ ...form, provider: e.target.value })}
+        />
+
+        {/* 🔥 INPUT DE IMAGEN SIN ROMPER DISEÑO */}
+        <input
+          type="file"
+          accept="image/*"
+          onChange={(e) => setForm({ ...form, image: e.target.files[0] })}
         />
 
         <div className="modal-actions">
