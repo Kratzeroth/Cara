@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { QRCodeCanvas } from "qrcode.react"; 
 import Header from "./Header";
 import Footer from "./Footer";
 import f1 from "../src/assets/img/products/f1.jpg";
@@ -31,10 +32,49 @@ const Pasarela = () => {
 
   const total = productos.reduce((acc, p) => acc + p.precio * p.cantidad, 0);
 
-  const generarQR = (texto) =>
-    `https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl=${encodeURIComponent(
-      texto
+  // ---------------------------
+  //   MICROSERVICIO WHATSAPP
+  // ---------------------------
+  const pagarPorWhatsApp = async () => {
+    try {
+      const resp = await fetch("https://microservicios-inj5.onrender.com/api/wsp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          nombre: "Cliente",
+          total: total,
+        }),
+      });
+
+      const data = await resp.json();
+
+      if (data.url) {
+        window.open(data.url, "_blank");
+      } else {
+        alert("Error al generar el enlace de pago");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("No se pudo conectar con el microservicio");
+    }
+  };
+
+  // URLs QR Yape y Plin
+  const generarYapeURL = (total) => {
+    const phone = "987654321";
+    const message = `Pago por compra Tienda CARA - Monto: S/. ${total}`;
+    return `https://www.yape.com.pe/pay?phone=${phone}&amount=${total}&message=${encodeURIComponent(
+      message
     )}`;
+  };
+
+  const generarPlinURL = (total) => {
+    const phone = "912345678";
+    const message = `Pago por compra Tienda CARA - Monto: S/. ${total}`;
+    return `https://www.plin.pe/pay?phone=${phone}&amount=${total}&message=${encodeURIComponent(
+      message
+    )}`;
+  };
 
   return (
     <>
@@ -92,29 +132,58 @@ const Pasarela = () => {
               {metodo === "yape" ? (
                 <>
                   <h3>Pagar con Yape</h3>
-                  <img
-                    src={generarQR(
-                      `Pago Yape - Monto: S/. ${total} - Cel: 987654321`
-                    )}
-                    alt="QR Yape"
+                  <QRCodeCanvas
+                    value={generarYapeURL(total)}
+                    size={250}
+                    bgColor="#ffffff"
+                    fgColor="#000000"
+                    includeMargin={true}
                   />
-                  <p>Escanea el QR o envía a: <strong>987 654 321</strong></p>
+                  <p>
+                    Escanea el QR o envía a: <strong>987 654 321</strong>
+                  </p>
                 </>
               ) : (
                 <>
                   <h3>Pagar con Plin</h3>
-                  <img
-                    src={generarQR(
-                      `Pago Plin - Monto: S/. ${total} - Cel: 912345678`
-                    )}
-                    alt="QR Plin"
+                  <QRCodeCanvas
+                    value={generarPlinURL(total)}
+                    size={250}
+                    bgColor="#ffffff"
+                    fgColor="#000000"
+                    includeMargin={true}
                   />
-                  <p>Escanea el QR o envía a: <strong>912 345 678</strong></p>
+                  <p>
+                    Escanea el QR o envía a: <strong>912 345 678</strong>
+                  </p>
                 </>
               )}
             </div>
 
-            <button className="btn-cerrar" onClick={() => setMostrarPasarela(false)}>
+            {/* --------------------------- */}
+            {/*    BOTÓN NUEVO WHATSAPP     */}
+            {/* --------------------------- */}
+            <button
+              className="btn-wsp"
+              onClick={pagarPorWhatsApp}
+              style={{
+                marginTop: "15px",
+                backgroundColor: "#25D366",
+                color: "white",
+                padding: "12px 20px",
+                borderRadius: "8px",
+                fontSize: "16px",
+                border: "none",
+                cursor: "pointer",
+              }}
+            >
+              💬 Pagar por WhatsApp
+            </button>
+
+            <button
+              className="btn-cerrar"
+              onClick={() => setMostrarPasarela(false)}
+            >
               Cancelar
             </button>
           </div>
