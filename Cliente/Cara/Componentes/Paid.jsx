@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { QRCodeCanvas } from "qrcode.react"; 
 import Header from "./Header";
 import Footer from "./Footer";
@@ -33,11 +33,11 @@ const Pasarela = () => {
   const total = productos.reduce((acc, p) => acc + p.precio * p.cantidad, 0);
 
   // ---------------------------
-  //   MICROSERVICIO WHATSAPP
+  //     MICROSERVICIO WSP
   // ---------------------------
   const pagarPorWhatsApp = async () => {
     try {
-          const resp = await fetch("https://microservicios-jnj5.onrender.com/api/wsp", {
+      const resp = await fetch("https://microservicios-jnj5.onrender.com/api/wsp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -59,7 +59,69 @@ const Pasarela = () => {
     }
   };
 
-  // URLs QR Yape y Plin
+  // ---------------------------
+  //     MERCADO PAGO
+  // ---------------------------
+  const generarMercadoPagoURL = async (total) => {
+    try {
+      const resp = await fetch(
+        "https://microservicio-mercado.onrender.com/api/pago",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ total }),
+        }
+      );
+
+      const data = await resp.json();
+      return data.url || null;
+    } catch (err) {
+      console.error("ERROR MP:", err);
+      return null;
+    }
+  };
+
+  // Componente para QR Mercado Pago
+  const MercadoPagoQR = ({ total }) => {
+    const [link, setLink] = useState(null);
+    const [error, setError] = useState(false);
+
+    useEffect(() => {
+      const cargar = async () => {
+        const url = await generarMercadoPagoURL(total);
+        if (url) setLink(url);
+        else setError(true);
+      };
+      cargar();
+    }, [total]);
+
+    if (error)
+      return <p style={{ color: "red" }}>❌ Error al generar QR de Mercado Pago.</p>;
+
+    if (!link) return <p>Cargando QR...</p>;
+
+    return (
+      <>
+        <QRCodeCanvas
+          value={link}
+          size={250}
+          bgColor="#ffffff"
+          fgColor="#000000"
+          includeMargin={true}
+        />
+        <p>
+          También puedes pagar aquí: <br />
+          <a href={link} target="_blank" rel="noreferrer">
+            Abrir Mercado Pago
+          </a>
+        </p>
+      </>
+    );
+  };
+
+  // ---------------------------
+  //     YAPE
+  // ---------------------------
   const generarYapeURL = (total) => {
     const phone = "987654321";
     const message = `Pago por compra Tienda CARA - Monto: S/. ${total}`;
@@ -68,25 +130,20 @@ const Pasarela = () => {
     )}`;
   };
 
-  const generarPlinURL = (total) => {
-    const phone = "912345678";
-    const message = `Pago por compra Tienda CARA - Monto: S/. ${total}`;
-    return `https://www.plin.pe/pay?phone=${phone}&amount=${total}&message=${encodeURIComponent(
-      message
-    )}`;
-  };
-
   return (
     <>
       <Header />
+
       <main className="pasarela-container">
         <h2 className="titulo-pasarela">Resumen de compra</h2>
+
         <div className="productos-grid">
           {productos.map((p) => (
             <div key={p.id} className="producto-card">
               <img src={p.img} alt={p.nombre} />
               <h4>{p.nombre}</h4>
               <p>S/. {p.precio}</p>
+
               <div className="cantidad-controles">
                 <button onClick={() => disminuirCantidad(p.id)}>-</button>
                 <span>{p.cantidad}</span>
@@ -107,10 +164,11 @@ const Pasarela = () => {
         </div>
       </main>
 
+      {/* ---------- MODAL ---------- */}
       {mostrarPasarela && (
         <div className="overlay-pasarela">
           <div className="modal-pago">
-            <h2>Pago seguro - Tienda CARA</h2>
+            <h2>Cancela tu pedido</h2>
             <p className="monto">Monto total: S/. {total}</p>
 
             <div className="metodos">
@@ -120,16 +178,17 @@ const Pasarela = () => {
               >
                 Yape
               </button>
+
               <button
-                className={`metodo ${metodo === "plin" ? "activo" : ""}`}
-                onClick={() => setMetodo("plin")}
+                className={`metodo ${metodo === "mercado" ? "activo" : ""}`}
+                onClick={() => setMetodo("mercado")}
               >
-                Plin
+                Mercado Pago
               </button>
             </div>
 
             <div className="qr-box">
-              {metodo === "yape" ? (
+              {metodo === "yape" && (
                 <>
                   <h3>Pagar con Yape</h3>
                   <QRCodeCanvas
@@ -143,26 +202,16 @@ const Pasarela = () => {
                     Escanea el QR o envía a: <strong>987 654 321</strong>
                   </p>
                 </>
-              ) : (
+              )}
+
+              {metodo === "mercado" && (
                 <>
-                  <h3>Pagar con Plin</h3>
-                  <QRCodeCanvas
-                    value={generarPlinURL(total)}
-                    size={250}
-                    bgColor="#ffffff"
-                    fgColor="#000000"
-                    includeMargin={true}
-                  />
-                  <p>
-                    Escanea el QR o envía a: <strong>912 345 678</strong>
-                  </p>
+                  <h3>Pagar con Mercado Pago</h3>
+                  <MercadoPagoQR total={total} />
                 </>
               )}
             </div>
 
-            {/* --------------------------- */}
-            {/*    BOTÓN NUEVO WHATSAPP     */}
-            {/* --------------------------- */}
             <button
               className="btn-wsp"
               onClick={pagarPorWhatsApp}
@@ -194,5 +243,8 @@ const Pasarela = () => {
     </>
   );
 };
+
+
+
 
 export default Pasarela;
