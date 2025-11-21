@@ -37,7 +37,7 @@ const Pasarela = () => {
   // ---------------------------
   const pagarPorWhatsApp = async () => {
     try {
-      const resp = await fetch("https://microservicios-inj5.onrender.com/api/wsp", {
+          const resp = await fetch("https://microservicios-jnj5.onrender.com/api/wsp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
